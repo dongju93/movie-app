@@ -1,0 +1,28 @@
+import React from 'react';
+
+class App extends React.Component {
+  state = {
+    count: 0
+  };
+
+  add = () => {
+    this.setState(current => ({count: current.count + 1 }));
+  };
+  minus = () => {
+    this.setState({count: this.state.count - 1.5 });
+  };
+  // 자바스크립트로 setState 를 호출시 변경된 state 값을 대입 후
+  // render function 이 변경된 state 값만 새로 refresh 하고 재실행됌.
+  // state 를 새로 set 할때 ADD 부분과 같이
+  // react 에서 외부의 상태에 의존하지 않는 것이 가장 좋은 방법: current
+  
+  render() {
+    return <div>
+      <h1>The number is: {this.state.count}</h1>
+      <button onClick={this.add}>ADD</button>
+      <button onClick={this.minus}>MINUS</button>
+    </div>
+  };
+}
+
+export default App;

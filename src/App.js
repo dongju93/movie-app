@@ -1,14 +1,24 @@
 import React from 'react';
 import axios from 'axios';
+import Movie from './Movie';
+import './app.css';
 
 class App extends React.Component {
 
   state = {
-    isLoading: true
+    isLoading: true,
+    movies: []
   };
 
   getMovies = async () => {
-    const movies = await axios.get("https://yts-proxy.now.sh/list_movies.json")
+    const { 
+      data: { 
+        data: { 
+          movies
+         } 
+      } 
+    } = await axios.get("https://yts-proxy.now.sh/list_movies.json?sort_by=rating");
+    this.setState({ movies, isLoading: false });
   };
   // JavaScript 코드
   // async 를 통해 componentDidMount 가 실행 되기 전까지
@@ -21,12 +31,31 @@ class App extends React.Component {
   };
 
   render() {
-    const { isLoading } = this.state;
+    const { isLoading, movies } = this.state;
 
-    return <div>
-      {/* 3항 연산자 JavaScript 사용 */}
-      {this.state.isLoading ? "Loading.." : "We are ready" }
-    </div>
+    return (
+      <section className = "container">
+        {/* 3항 연산자 JavaScript 사용 */}
+        {isLoading ? (
+          <div className = "loader">
+            <span className = "loader_text">Loading..</span>
+          </div>
+        ) : (
+          <div className = "movies">
+            {movies.map(movie => (
+              <Movie
+                key={movie.id}
+                id={movie.id}
+                year={movie.year}
+                title={movie.title}
+                summary={movie.summary}
+                poster={movie.medium_cover_image}
+              />
+            ))}
+          </div>
+        )}
+      </section>
+    )
   };
 
 }
